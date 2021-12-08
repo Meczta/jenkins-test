@@ -1,0 +1,24 @@
+pipeline {
+agent any
+options {
+
+    buildDiscarder(logRotator(numToKeepStr: '5'))
+    disableConcurrentBuilds()
+    timeout(time: 10, unit: 'MINUTES')
+}
+triggers {
+    pollSCM('* * * * *')
+}
+stages {
+    stage('Example') {
+            steps {
+                echo 'Hello World'
+            }
+        }
+    stage("First step") {
+        steps {
+            sh 'ssh dream@192.168.56.102 \'docker run -p 3000:3000 -e github=\'https://github.com/meczta/itry.git\' -t oktaadmin/dockertest\''
+            }
+        }
+    }  
+}
